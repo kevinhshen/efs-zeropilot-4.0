@@ -88,6 +88,16 @@ target_include_directories(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${RELATIVE_EXTERNAL_INC})
 target_link_libraries(${PROJECT_NAME} GTest::gmock_main)
 
+//Resolve undiscoverable RPATH issue: --------------------------------
+if(APPLE)
+    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY BUILD_RPATH
+        "$<TARGET_FILE_DIR:GTest::gmock_main>"
+        "$<TARGET_FILE_DIR:GTest::gmock>"
+        "$<TARGET_FILE_DIR:GTest::gtest>"
+    )
+endif()
+//--------------------------------------------------------------------
+
 gtest_discover_tests(${PROJECT_NAME})
 
 if(PLANE_BUILD)
